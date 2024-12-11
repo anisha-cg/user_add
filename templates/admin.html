@@ -147,44 +147,47 @@
   <!-- Users Table Section -->
   <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Admin Dashboard - User List</h1>
-    <table class="table-auto w-full bg-white border border-gray-300 shadow-md rounded-md">
-      <thead>
-        <tr class="bg-gray-200">
-          <th class="border px-4 py-2">Unique ID</th>
-          <th class="border px-4 py-2">Name</th>
-          <th class="border px-4 py-2">Post</th>
-          <th class="border px-4 py-2">Roll No</th>
-          <th class="border px-4 py-2">Branch</th>
-          <th class="border px-4 py-2">Semester</th>
-          <th class="border px-4 py-2">Team</th>
-          <th class="border px-4 py-2">Actions</th>
-          <th class="border px-4 py-2">Generate QR Code</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in users %}
-        <tr class="hover:bg-gray-100 transition duration-200">
-          <td class="border px-4 py-2">{{ user.unique_id }}</td>
-          <td class="border px-4 py-2">{{ user.name }}</td>
-          <td class="border px-4 py-2">{{ user.post }}</td>
-          <td class="border px-4 py-2">{{ user.roll_no }}</td>
-          <td class="border px-4 py-2">{{ user.branch }}</td>
-          <td class="border px-4 py-2">{{ user.semester }}</td>
-          <td class="border px-4 py-2">{{ user.team }}</td>
-          <td class="border px-4 py-2">
-            <a href="/user?unique_id={{ user.unique_id }}"
+    <div class="overflow-x-auto">
+
+      <table class="table-auto w-full bg-white border border-gray-300 shadow-md rounded-md">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border px-4 py-2">Unique ID</th>
+            <th class="border px-4 py-2">Name</th>
+            <th class="border px-4 py-2">Post</th>
+            <th class="border px-4 py-2">Roll No</th>
+            <th class="border px-4 py-2">Branch</th>
+            <th class="border px-4 py-2">Semester</th>
+            <th class="border px-4 py-2">Team</th>
+            <th class="border px-4 py-2">Actions</th>
+            <th class="border px-4 py-2">Generate QR Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr class="hover:bg-gray-100 transition duration-200">
+            <td class="border px-4 py-2">{{ user.unique_id }}</td>
+            <td class="border px-4 py-2">{{ user.name }}</td>
+            <td class="border px-4 py-2">{{ user.post }}</td>
+            <td class="border px-4 py-2">{{ user.roll_no }}</td>
+            <td class="border px-4 py-2">{{ user.branch }}</td>
+            <td class="border px-4 py-2">{{ user.semester }}</td>
+            <td class="border px-4 py-2">{{ user.team }}</td>
+            <td class="border px-4 py-2">
+              <a href="/user?unique_id={{ user.unique_id }}"
               class="text-blue-500 hover:text-blue-700 transition duration-200">View</a>
-          </td>
-          <td class="border px-4 py-2">
-            <button onclick="generateQRCode('{{ user.unique_id }}')"
+            </td>
+            <td class="border px-4 py-2">
+              <button onclick="generateQRCode('{{ user.unique_id }}')"
               class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition duration-300">
               Generate QR Code
             </button>
           </td>
         </tr>
         {% endfor %}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- QR Code Modal -->
