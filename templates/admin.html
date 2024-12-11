@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Page with User Table</title>
+
+  <!-- Include Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+  <style>
+    /* Animated Background */
+    body {
+      background: linear-gradient(-45deg, #9fa2a2, #5d5e5f, #403f41, #3e3d3d);
+      background-size: 400% 400%;
+      animation: bgAnimation 10s ease infinite;
+    }
+
+    @keyframes bgAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+  <script>
+    let qrCanvas;
+    let qrCodeUrl;
+
+    // Function to generate QR Code
+    function generateQRCode(uniqueId) {
+      const modal = document.getElementById("qr-modal");
+      const qrCanvasEl = document.getElementById("qrCanvas");
+      const downloadButton = document.getElementById("download-btn");
+
+      qrCanvas = qrCanvasEl;
+
+      const baseUrl = `${window.location.origin}/user?unique_id=${uniqueId}`;
+
+      // Generate the QR Code
+      QRCode.toCanvas(qrCanvasEl, baseUrl, { width: 200 });
+
+      qrCodeUrl = baseUrl;
+
+      // Set download functionality
+      downloadButton.onclick = function () {
+        const link = document.createElement("a");
+        link.download = "user_qr_code.png";
+        link.href = qrCanvasEl.toDataURL();
+        link.click();
+      };
+
+      // Show modal
+      modal.classList.remove("hidden");
+    }
+
+    // Function to close Modal
+    function closeModal() {
+      const modal = document.getElementById("qr-modal");
+      modal.classList.add("hidden");
+    }
+  </script>
+</head>
+
+<body class="min-h-screen bg-cover bg-no-repeat bg-center text-gray-700">
+
+  <!-- Page Header -->
+  <div class=" bg-opacity-90 shadow-lg py-4">
+    <h1 class="text-4xl font-bold text-center text-gray-800 ">Admin Page</h1>
+  </div>
+
+  <!-- Main Form Section -->
+  <div class="flex items-center justify-center mt-6 px-4">
+    <div
+      class="bg-white bg-opacity-95 shadow-lg rounded-lg p-8 w-full max-w-lg transition-transform transform hover:scale-105">
+      <form action="/admin" method="POST" enctype="multipart/form-data" class="space-y-4">
+
+
+        <!-- Name -->
+        <div>
+          <label for="name" class="block font-semibold text-gray-700">Name:</label>
+          <input type="text" name="name" required
+            class="mt-1 p-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <!-- Post -->
+        <div>
+          <label for="post" class="block font-semibold text-gray-700">Post:</label>
+          <input type="text" name="post" required
+            class="mt-1 p-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <!-- University Roll No -->
+        <div>
+          <label for="roll_no" class="block font-semibold text-gray-700">University Roll No:</label>
+          <input type="text" name="roll_no" required
+            class="mt-1 p-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <!-- Branch -->
+        <div>
+          <label for="branch" class="block font-semibold text-gray-700">Branch:</label>
+          <input type="text" name="branch" required
+            class="mt-1 p-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <!-- Semester Year -->
+        <div>
+          <label for="semester" class="block font-semibold text-gray-700">Semester Year:</label>
+          <input type="text" name="semester" required
+            class="mt-1 p-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <!-- Team -->
+        <div>
+          <label for="team" class="block font-semibold text-gray-700">Team:</label>
+          <input type="text" name="team" required
+            class="mt-1 p-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <!-- Photo Upload Section -->
+        <div>
+          <label for="photo" class="block font-semibold text-gray-700">Upload Photo:</label>
+          <input type="file" name="photo" required
+            class="mt-1 p-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onchange="validateFileSize(this)">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-4">
+          <input type="submit"
+            class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out cursor-pointer">
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Users Table Section -->
+  <div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Admin Dashboard - User List</h1>
+    <table class="table-auto w-full bg-white border border-gray-300 shadow-md rounded-md">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border px-4 py-2">Unique ID</th>
+          <th class="border px-4 py-2">Name</th>
+          <th class="border px-4 py-2">Post</th>
+          <th class="border px-4 py-2">Roll No</th>
+          <th class="border px-4 py-2">Branch</th>
+          <th class="border px-4 py-2">Semester</th>
+          <th class="border px-4 py-2">Team</th>
+          <th class="border px-4 py-2">Actions</th>
+          <th class="border px-4 py-2">Generate QR Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr class="hover:bg-gray-100 transition duration-200">
+          <td class="border px-4 py-2">{{ user.unique_id }}</td>
+          <td class="border px-4 py-2">{{ user.name }}</td>
+          <td class="border px-4 py-2">{{ user.post }}</td>
+          <td class="border px-4 py-2">{{ user.roll_no }}</td>
+          <td class="border px-4 py-2">{{ user.branch }}</td>
+          <td class="border px-4 py-2">{{ user.semester }}</td>
+          <td class="border px-4 py-2">{{ user.team }}</td>
+          <td class="border px-4 py-2">
+            <a href="/user?unique_id={{ user.unique_id }}"
+              class="text-blue-500 hover:text-blue-700 transition duration-200">View</a>
+          </td>
+          <td class="border px-4 py-2">
+            <button onclick="generateQRCode('{{ user.unique_id }}')"
+              class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition duration-300">
+              Generate QR Code
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div id="qr-modal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+      <h2 class="text-lg font-bold mb-4">Generated QR Code </h2>
+      <canvas id="qrCanvas" width="200" height="200" class="mx-auto mb-4"></canvas>
+      <div class="flex justify-between gap-2 mt-4">
+        <button id="download-btn"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-300">Download QR
+          Code</button>
+        <button onclick="closeModal()"
+          class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% if alert %}
+  <script>
+    alert("{{ alert }}");
+  </script>
+  {% endif %}
+
+
+  <script>
+    function validateFileSizeAndType(input) {
+      const file = input.files[0];
+      const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+      const allowedExtensions = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']; // Allowed MIME types
+
+      if (file) {
+        // Check file size
+        if (file.size > maxSizeInBytes) {
+          alert('File size must be less than 5MB.');
+          input.value = ''; // Clear the input
+          return;
+        }
+
+        // Check file type
+        if (!allowedExtensions.includes(file.type)) {
+          alert('Only PNG, JPEG, JPG, and GIF files are allowed.');
+          input.value = ''; // Clear the input
+          return;
+        }
+      }
+    }
+  </script>
+
+  
+
+
+</body>
+
+</html>
